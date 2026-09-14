@@ -1,4 +1,4 @@
-# Shawarma Sinbad
+# Sinbad
 
 A containerized Ruby on Rails web application developed for restaurant operations, featuring delivery platform integration, automated continuous integration, and production deployment workflows.
 
