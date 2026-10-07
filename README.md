@@ -79,3 +79,12 @@ Automated GitHub Actions workflows maintain code quality and deployment standard
 
 * **CI (`ci.yml`):** Executes test suites and validation checks on pull requests and pushes.
 * **Docker Publish (`docker-publish.yml`):** Builds and pushes production-ready container images to the registry.
+
+### Pelican
+
+Import the [Pelican egg](deploy/pelican/egg-shawarma-sinbad.json) and use the
+published `ghcr.io/mom0oo0/shawarmasinbad:main` image. Set `RAILS_MASTER_KEY`
+and `ADMIN_PASSWORD`; set `CLOUDFLARED_TOKEN` to enable the integrated Cloudflare
+Tunnel. Mount persistent storage at `/rails/storage` for production data.
+
+See the [Pelican deployment guide](deploy/pelican/README.md) for setup details.

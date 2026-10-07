@@ -1,0 +1,40 @@
+#!/bin/bash
+set -Eeuo pipefail
+
+cd /rails
+./bin/rails db:prepare
+./bin/rails server -b 0.0.0.0 -p "${SERVER_PORT:-3000}" &
+rails_pid=$!
+tunnel_pid=""
+
+if [[ -n "${CLOUDFLARED_TOKEN:-}" ]]; then
+  cloudflared tunnel --no-autoupdate run --token "$CLOUDFLARED_TOKEN" &
+  tunnel_pid=$!
+else
+  echo "CLOUDFLARED_TOKEN is empty; starting without a Cloudflare Tunnel."
+fi
+
+stop_services() {
+  trap - TERM INT
+  kill "$rails_pid" 2>/dev/null || true
+  if [[ -n "$tunnel_pid" ]]; then
+    kill "$tunnel_pid" 2>/dev/null || true
+  fi
+  wait "$rails_pid" 2>/dev/null || true
+  if [[ -n "$tunnel_pid" ]]; then
+    wait "$tunnel_pid" 2>/dev/null || true
+  fi
+}
+
+trap stop_services TERM INT
+set +e
+if [[ -n "$tunnel_pid" ]]; then
+  wait -n "$rails_pid" "$tunnel_pid"
+else
+  wait "$rails_pid"
+fi
+status=$?
+set -e
+
+stop_services
+exit "$status"

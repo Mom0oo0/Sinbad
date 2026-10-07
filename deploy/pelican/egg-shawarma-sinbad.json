@@ -1,0 +1,77 @@
+{
+  "_comment": "Pelican egg for the Shawarma Sinbad Rails application",
+  "meta": {
+    "version": "PTDL_v2",
+    "update_url": null
+  },
+  "exported_at": "2026-10-07T00:00:00+00:00",
+  "name": "Shawarma Sinbad",
+  "author": "github.com/Mom0oo0",
+  "description": "Production Rails app with optional integrated Cloudflare Tunnel support.",
+  "features": null,
+  "docker_images": {
+    "ghcr.io/mom0oo0/shawarmasinbad:main": "Shawarma Sinbad (Rails + cloudflared)"
+  },
+  "file_denylist": [],
+  "startup": "cd /rails && bash ./bin/pelican-start",
+  "config": {
+    "files": "{}",
+    "startup": {
+      "done": "Listening on"
+    },
+    "logs": {
+      "custom": false,
+      "location": "logs/latest.log"
+    },
+    "stop": "^C"
+  },
+  "scripts": {
+    "installation": {
+      "script": "#!/bin/bash\necho 'Using the prebuilt Shawarma Sinbad container image.'\n",
+      "container": "ghcr.io/pterodactyl/installers:debian",
+      "entrypoint": "bash"
+    }
+  },
+  "variables": [
+    {
+      "name": "Rails master key",
+      "description": "Rails production credentials key.",
+      "env_variable": "RAILS_MASTER_KEY",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string",
+      "field_type": "text"
+    },
+    {
+      "name": "Admin password",
+      "description": "Password used to access the admin area.",
+      "env_variable": "ADMIN_PASSWORD",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string",
+      "field_type": "text"
+    },
+    {
+      "name": "Cloudflare Tunnel token",
+      "description": "Optional remotely-managed Cloudflare Tunnel token. Leave blank to disable the tunnel.",
+      "env_variable": "CLOUDFLARED_TOKEN",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "nullable|string",
+      "field_type": "text"
+    },
+    {
+      "name": "Server port",
+      "description": "Pelican server allocation port.",
+      "env_variable": "SERVER_PORT",
+      "default_value": "{{server.build.default.port}}",
+      "user_viewable": false,
+      "user_editable": false,
+      "rules": "required|integer",
+      "field_type": "text"
+    }
+  ]
+}

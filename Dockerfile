@@ -53,6 +53,9 @@ RUN chmod +x bin/* && \
 # Final stage for app image
 FROM base
 
+# Add cloudflared for Pelican deployments that enable a tunnel token.
+COPY --from=cloudflare/cloudflared:latest /usr/local/bin/cloudflared /usr/local/bin/cloudflared
+
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
